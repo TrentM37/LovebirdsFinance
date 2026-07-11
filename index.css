@@ -1947,6 +1947,23 @@ h3 {
     padding: 10px var(--spacing-sm) !important;
   }
 
+  /* Fix iOS Safari Date input clipping and width overflow */
+  input[type="date"].form-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left !important;
+    min-height: 1.2em !important;
+    margin: 0 !important;
+  }
+
   .amount-field {
     font-size: 18px !important;
     padding-left: 28px !important;
