@@ -1,0 +1,8 @@
+{
+  "name": "Lovebirds Finance",
+  "short_name": "BudgetApp",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}
