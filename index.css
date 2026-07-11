@@ -1922,6 +1922,52 @@ h3 {
     height: 28px !important;
   }
 
+  /* Floating Modal Cards for Input Drawers on Mobile */
+  .form-drawer {
+    width: calc(100% - 24px) !important;
+    margin: 12px !important;
+    margin-bottom: calc(48px + env(safe-area-inset-bottom) + 12px) !important;
+    border-radius: var(--border-radius-md) !important;
+    max-height: calc(100vh - 48px - env(safe-area-inset-bottom) - 40px) !important;
+    padding: var(--spacing-md) !important;
+    box-shadow: 0 10px 30px rgba(43, 36, 33, 0.25) !important;
+  }
+
+  .drawer-header {
+    margin-bottom: var(--spacing-md) !important;
+  }
+
+  .drawer-body {
+    padding-bottom: var(--spacing-md) !important;
+  }
+
+  /* Prevent iOS Safari from auto-zooming on focus (requires >= 16px font-size) */
+  .form-input {
+    font-size: 16px !important;
+    padding: 10px var(--spacing-sm) !important;
+  }
+
+  .amount-field {
+    font-size: 18px !important;
+    padding-left: 28px !important;
+  }
+
+  .drawer-footer {
+    grid-template-columns: 70px 1fr 1fr !important;
+    gap: 6px !important;
+    padding-top: var(--spacing-sm) !important;
+  }
+
+  .drawer-footer[style*="80px 1fr"] {
+    grid-template-columns: 70px 1fr !important;
+  }
+
+  .drawer-footer button {
+    font-size: 12px !important;
+    padding: 10px 4px !important;
+    white-space: nowrap !important;
+  }
+
   .cash-allocation-legend {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
