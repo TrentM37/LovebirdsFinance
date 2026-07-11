@@ -39,8 +39,6 @@
 
 </head>
 <body>
-  <!-- Global Month Picker Input (body level to prevent display:none constraints) -->
-  <input type="month" id="global-month-picker" style="position: fixed; top: 10px; left: 10px; width: 1px; height: 1px; opacity: 0; z-index: -1; border: none; padding: 0;">
 
   <div class="app-container">
     
@@ -59,8 +57,9 @@
       </div>
       
       <!-- Desktop Sidebar Month Selector -->
-      <div class="sidebar-cycle-selector" style="padding: 0 var(--spacing-md); margin-bottom: var(--spacing-lg);">
-        <button class="month-selector-btn" style="width: 100%; justify-content: center; background-color: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--color-base-canvas);">
+      <div class="sidebar-cycle-selector" style="position: relative; padding: 0 var(--spacing-md); margin-bottom: var(--spacing-lg);">
+        <input type="month" class="global-month-picker" style="position: absolute; top: 0; left: var(--spacing-md); width: calc(100% - var(--spacing-md) * 2); height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+        <button class="month-selector-btn" style="width: 100%; justify-content: center; background-color: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--color-base-canvas); pointer-events: none; position: relative;">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="margin-right: 6px;"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
           <span id="desktop-month-label">--</span>
         </button>
@@ -125,10 +124,13 @@
         
         <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
           <!-- Combined Month Selector Pill -->
-          <button class="month-selector-btn" style="font-weight: 700; color: var(--color-primary-accent); padding: 5px 10px; font-size: 12px; gap: 4px;">
-            <span id="current-month-label">--</span>
-            <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-          </button>
+          <div class="mobile-month-selector-wrapper" style="position: relative; display: inline-block;">
+            <input type="month" class="global-month-picker" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+            <button class="month-selector-btn" style="font-weight: 700; color: var(--color-primary-accent); padding: 5px 10px; font-size: 12px; gap: 4px; pointer-events: none; position: relative;">
+              <span id="current-month-label">--</span>
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+            </button>
+          </div>
 
           <!-- Unified Header Sign In / Status Button -->
           <button class="month-selector-btn" id="btn-header-login-status" style="display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-weight: 700; color: var(--color-primary-accent);">

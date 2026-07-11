@@ -312,52 +312,46 @@ function renderActiveView() {
 // Month Picker Logic
 // ==========================================================================
 function bindMonthSelector() {
-  const monthInput = document.getElementById('global-month-picker');
-  if (monthInput) {
+  const monthInputs = document.querySelectorAll('.global-month-picker');
+  const mLabel = document.getElementById('current-month-label');
+  const dLabel = document.getElementById('desktop-month-label');
+  
+  if (monthInputs.length > 0) {
     // Set to current month by default
     const [m, y] = state.activeMonthYear.split('-');
-    monthInput.value = `${y}-${m}`;
+    const valStr = `${y}-${m}`;
+    
+    monthInputs.forEach(input => {
+      input.value = valStr;
+    });
     
     // Update labels
     const readableMonth = window.formatMonthYearReadable(state.activeMonthYear);
-    const mLabel = document.getElementById('current-month-label');
     if (mLabel) mLabel.textContent = readableMonth;
-    const dLabel = document.getElementById('desktop-month-label');
     if (dLabel) dLabel.textContent = readableMonth;
 
-    // Bind click events on all selector buttons programmatically
-    const selectorBtns = document.querySelectorAll('.month-selector-btn');
-    selectorBtns.forEach(btn => {
-      // Skip status buttons which have their own logic
-      if (btn.id === 'btn-header-login-status' || btn.id === 'btn-sidebar-login-status') return;
-      
-      if (!btn.dataset.boundSelector) {
-        btn.dataset.boundSelector = "true";
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          try {
-            monthInput.showPicker();
-          } catch (err) {
-            console.error("Native showPicker failed, fallback focus:", err);
-            monthInput.focus();
-            monthInput.click();
-          }
+    monthInputs.forEach(input => {
+      if (!input.dataset.boundSelector) {
+        input.dataset.boundSelector = "true";
+        input.addEventListener('change', async (e) => {
+          const val = e.target.value; // YYYY-MM
+          if (!val) return;
+          const [y, m] = val.split('-');
+          state.activeMonthYear = `${m}-${y}`;
+          
+          // Sync all inputs
+          monthInputs.forEach(inp => {
+            inp.value = val;
+          });
+          
+          const newReadable = window.formatMonthYearReadable(state.activeMonthYear);
+          if (mLabel) mLabel.textContent = newReadable;
+          if (dLabel) dLabel.textContent = newReadable;
+          
+          resetWizardState();
+          await refreshApplicationData();
         });
       }
-    });
-
-    monthInput.addEventListener('change', async (e) => {
-      const val = e.target.value; // YYYY-MM
-      if (!val) return;
-      const [y, m] = val.split('-');
-      state.activeMonthYear = `${m}-${y}`;
-      
-      const newReadable = window.formatMonthYearReadable(state.activeMonthYear);
-      if (mLabel) mLabel.textContent = newReadable;
-      if (dLabel) dLabel.textContent = newReadable;
-      
-      resetWizardState();
-      await refreshApplicationData();
     });
   }
 }
