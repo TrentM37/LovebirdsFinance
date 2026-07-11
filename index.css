@@ -1922,6 +1922,12 @@ h3 {
     height: 28px !important;
   }
 
+  .fullscreen-overlay {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
   /* Floating Modal Cards for Input Drawers on Mobile */
   .form-drawer {
     width: calc(100% - 24px) !important;
@@ -1931,6 +1937,7 @@ h3 {
     max-height: calc(100vh - 48px - env(safe-area-inset-bottom) - 40px) !important;
     padding: var(--spacing-md) !important;
     box-shadow: 0 10px 30px rgba(43, 36, 33, 0.25) !important;
+    overflow-x: hidden !important;
   }
 
   .drawer-header {
@@ -1939,6 +1946,8 @@ h3 {
 
   .drawer-body {
     padding-bottom: var(--spacing-md) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
 
   /* Prevent iOS Safari from auto-zooming on focus (requires >= 16px font-size) */
