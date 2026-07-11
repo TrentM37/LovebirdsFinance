@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    window.onerror = function(msg, url, line, col, error) {
+      var div = document.createElement('div');
+      div.style.position = 'fixed';
+      div.style.top = '10px';
+      div.style.left = '10px';
+      div.style.right = '10px';
+      div.style.background = '#ff453a';
+      div.style.color = 'white';
+      div.style.padding = '15px';
+      div.style.zIndex = '999999';
+      div.style.fontFamily = 'monospace';
+      div.style.fontSize = '12px';
+      div.style.borderRadius = '5px';
+      div.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+      div.innerHTML = '<strong>Client-side Exception:</strong> ' + msg + '<br><small>at ' + url + ':' + line + ':' + col + '</small>';
+      document.body.appendChild(div);
+      return false;
+    };
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lovebirds Finance</title>
+  
+  <!-- CSS Link -->
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- Google Sign-In Identity Services Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. DESKTOP SIDEBAR SHELL -->
+    <aside class="desktop-sidebar">
+      <div class="sidebar-title">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; fill: none !important; width: 24px; height: 24px; color: currentColor;">
+          <path d="M16 7h.01" />
+          <path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" />
+          <path d="m20 7 2 .5-2 .5" />
+          <path d="M10 18v3" />
+          <path d="M14 17.75V21" />
+          <path d="M7 18a6 6 0 0 0 3.84-10.61" />
+        </svg>
+        <span>Lovebirds Finance</span>
+      </div>
+      
+      <!-- Desktop Sidebar Month Selector -->
+      <div class="sidebar-cycle-selector" style="padding: 0 var(--spacing-md); margin-bottom: var(--spacing-lg);">
+        <button class="month-selector-btn" style="width: 100%; justify-content: center; background-color: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--color-base-canvas);" onclick="document.getElementById('global-month-picker').showPicker()">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="margin-right: 6px;"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+          <span id="desktop-month-label">--</span>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="sidebar-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Dashboard
+        </button>
+        <button class="sidebar-item" data-view="ledger">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Transaction List
+        </button>
+        <button class="sidebar-item" data-view="budget">
+          <svg viewBox="0 0 24 24"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H3V6h14v8zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm13 8h-2V7c0-1.1-.9-2-2-2H9V3c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2z"/></svg>
+          Budget Tracking
+        </button>
+        <button class="sidebar-item" data-view="savings">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Savings Goals
+        </button>
+        <button class="sidebar-item" data-view="debts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="fill: none !important;"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Income & Payables
+        </button>
+        <button class="sidebar-item" data-view="analytics">
+          <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+          Analytics Engine
+        </button>
+        <button class="sidebar-item" data-view="wizard">
+          <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+          Month Plan
+        </button>
+      </nav>
+      
+      <button class="sidebar-item" id="btn-sidebar-login-status" style="margin-top: auto;">
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0;">
+          <svg viewBox="0 0 24 24" style="width: 100%; height: 100%; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          <span id="sidebar-login-dot" style="position: absolute; top: -1px; right: -1px; width: 7px; height: 7px; border-radius: 50%; display: inline-block; background-color: var(--color-font-secondary); border: 1px solid var(--color-primary-accent); transition: background-color 0.3s; z-index: 10;"></span>
+        </div>
+        <span id="sidebar-login-text">Sign In</span>
+      </button>
+    </aside>
+
+    <!-- 2. MAIN VIEWS SECTION -->
+    <main class="main-content">
+      
+      <!-- HEADER BAR (Mobile Only) -->
+      <header class="header-bar">
+        <div class="mobile-header-brand" style="display: flex; align-items: center; gap: 8px; color: var(--color-primary-accent);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; fill: none !important; color: currentColor;">
+            <path d="M16 7h.01" />
+            <path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" />
+            <path d="m20 7 2 .5-2 .5" />
+            <path d="M10 18v3" />
+            <path d="M14 17.75V21" />
+            <path d="M7 18a6 6 0 0 0 3.84-10.61" />
+          </svg>
+          <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em;">Lovebirds</span>
+        </div>
+        
+        <!-- Hidden input month picker -->
+        <input type="month" id="global-month-picker" style="opacity:0; position:absolute; pointer-events:none;">
+
+        <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+          <!-- Combined Month Selector Pill -->
+          <button class="month-selector-btn" onclick="document.getElementById('global-month-picker').showPicker()" style="font-weight: 700; color: var(--color-primary-accent); padding: 5px 10px; font-size: 12px; gap: 4px;">
+            <span id="current-month-label">--</span>
+            <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+          </button>
+
+          <!-- Unified Header Sign In / Status Button -->
+          <button class="month-selector-btn" id="btn-header-login-status" style="display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-weight: 700; color: var(--color-primary-accent);">
+            <span id="google-sync-dot" style="width: 8px; height: 8px; border-radius: 50%; display: inline-block; background-color: var(--color-font-secondary); transition: background-color 0.3s; flex-shrink: 0;"></span>
+            <span id="google-sync-text" style="font-size: 11px;">Sign In</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEWS VIEWPORT CONTAINER -->
+      <div class="views-viewport">
+        
+        <!-- ==================== VIEW 0: DASHBOARD ==================== -->
+        <section class="app-view active" id="view-dashboard">
+          <div class="card-title-row">
+            <h1>Financial Dashboard</h1>
+          </div>
+
+          <!-- Liquid Asset Cards -->
+          <div class="liquid-assets-row">
+            <div class="asset-card card-checking">
+              <div class="asset-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+              </div>
+              <div class="asset-meta">
+                <span class="text-meta">Liquid</span>
+                <span class="asset-val" id="cash-balance-val">$0.00</span>
+              </div>
+            </div>
+            <div class="asset-card card-savings">
+              <div class="asset-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+              </div>
+              <div class="asset-meta">
+                <span class="text-meta">Savings Balance</span>
+                <span class="asset-val" id="savings-balance-val">$0.00</span>
+              </div>
+            </div>
+            <div class="asset-card card-net-monthly">
+              <div class="asset-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+              </div>
+              <div class="asset-meta">
+                <span class="text-meta" id="net-balance-label">Monthly Net Inflow</span>
+                <span class="asset-val" id="net-balance-val">$0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cash Availability Allocation Visualizer -->
+          <div class="card cash-allocation-card" style="margin-bottom: var(--spacing-md);">
+            <div class="card-title-row" style="margin-bottom: var(--spacing-xs); display: flex; justify-content: space-between; align-items: center;">
+              <h2>Cash Availability</h2>
+              <span class="text-meta" id="cash-allocation-total-lbl" style="font-weight: 600; color: var(--color-font-primary);">Total Cash: $0.00</span>
+            </div>
+            <div class="cash-allocation-bar">
+              <div class="cash-bar-segment segment-free" id="cash-bar-free" style="width: 0%"></div>
+              <div class="cash-bar-segment segment-expected" id="cash-bar-expected" style="width: 0%"></div>
+              <div class="cash-bar-segment segment-savings" id="cash-bar-savings" style="width: 0%"></div>
+              <div class="cash-bar-segment segment-carry-over" id="cash-bar-carry-over" style="width: 0%"></div>
+              <div class="cash-bar-segment segment-deficit" id="cash-bar-deficit" style="width: 0%"></div>
+            </div>
+            <div class="cash-allocation-legend">
+              <div class="legend-item">
+                <span class="legend-dot dot-free"></span>
+                <span class="legend-label">Free Cash (Unreserved): <strong id="cash-legend-free" class="tabular-nums">$0.00</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot dot-expected"></span>
+                <span class="legend-label">Expected Expenses: <strong id="cash-legend-expected" class="tabular-nums">$0.00</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot dot-savings"></span>
+                <span class="legend-label">Savings Cash (Locked): <strong id="cash-legend-savings" class="tabular-nums">$0.00</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot dot-carry-over"></span>
+                <span class="legend-label">Carry-over Cash: <strong id="cash-legend-carry-over" class="tabular-nums">$0.00</strong></span>
+              </div>
+              <div class="legend-item" id="cash-legend-deficit-container" style="display: none;">
+                <span class="legend-dot dot-deficit"></span>
+                <span class="legend-label" style="color: var(--color-alert); font-weight: 600;">Deficit (Need to Free): <strong id="cash-legend-deficit" class="tabular-nums">$0.00</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard layout grid -->
+          <div class="dashboard-grid">
+            <!-- Left Side: Budget Tracking Progress -->
+            <div class="card metric-bar-card" id="dash-budget-health-card">
+              <h2>Monthly Budget Health</h2>
+              <div class="metric-bar-info" id="dash-budget-progress-info">
+                <span>Spent: --</span>
+                <span>Cap: --</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill progress-normal" id="dash-budget-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Right Side: Savings Target Progress -->
+            <div class="card metric-bar-card" id="dash-savings-goal-card">
+              <h2>Monthly Savings Goal</h2>
+              <div class="metric-bar-info" id="dash-goal-progress-info">
+                <span>Allocated: --</span>
+                <span>Goal: --</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill progress-normal" id="dash-goal-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Start New Month Plan Promo Tile -->
+          <div class="card promo-card-green" id="dash-promo-wizard-container" style="display: none; margin-top: var(--spacing-md); text-align: center; background-color: var(--color-success-light); border: 2px solid var(--color-success); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;">
+            <div style="padding: var(--spacing-md); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--spacing-sm);">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="var(--color-success)" style="margin-bottom: var(--spacing-xs);">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+              </svg>
+              <h2 style="color: var(--color-success); font-size: 18px; font-weight: 700; margin: 0;">Start New Month Plan</h2>
+              <span class="text-meta" style="color: var(--color-success); opacity: 0.85;">Set up your budget limits, savings goals, and income goals for the new cycle.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 1: TRANSACTION LIST ==================== -->
+        <section class="app-view" id="view-ledger">
+          <div class="card-title-row">
+            <h1>Lovebirds Outflows Ledger</h1>
+          </div>
+
+          <!-- Static aggregation header metrics -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--spacing-md); margin-bottom:var(--spacing-md);">
+            <div class="card" style="margin-bottom:0; text-align:center; padding:var(--spacing-md);">
+              <span class="text-meta">Total Money Inflow</span>
+              <div class="metric-large-num amount-positive" id="ledger-total-in">$0.00</div>
+            </div>
+            <div class="card" style="margin-bottom:0; text-align:center; padding:var(--spacing-md);">
+              <span class="text-meta">Total Money Spent</span>
+              <div class="metric-large-num amount-negative" id="ledger-total-out">$0.00</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Expense Segmented Bar & Time Filter Card -->
+          <div class="card" id="ledger-analytics-card" style="margin-top: var(--spacing-md); padding: var(--spacing-md); margin-bottom: var(--spacing-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
+              <h2 style="font-size: 14px; font-weight: 600; color: var(--color-font-primary); margin: 0;">Expense Category Distribution</h2>
+              <div class="pill-group">
+                <button class="pill-btn active" id="ledger-scope-month" onclick="window.setLedgerScope('month')">Month</button>
+                <button class="pill-btn" id="ledger-scope-year" onclick="window.setLedgerScope('year')">Year</button>
+                <button class="pill-btn" id="ledger-scope-all" onclick="window.setLedgerScope('all-time')">All-Time</button>
+              </div>
+            </div>
+            <div class="progress-bar-container" id="ledger-expense-progress-container" style="height: 10px; border-radius: 5px; margin-bottom: var(--spacing-sm); display: flex; overflow: hidden; background-color: var(--color-surface-variant); margin-top: 0;">
+              <!-- Segments injected here -->
+            </div>
+            <div id="ledger-expense-legend" style="display: flex; flex-wrap: wrap; gap: var(--spacing-sm) var(--spacing-md); font-size: 11px;">
+              <!-- Legend items injected here -->
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Subgroup</th>
+                  <th>Amount</th>
+                  <th style="width: 50px; text-align: center;">Info</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-tbody">
+                <!-- Javascript will populate rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 2: BUDGET GROUPS ==================== -->
+        <section class="app-view" id="view-budget">
+          <div class="card-title-row">
+            <h1>Budget Category Tracking</h1>
+          </div>
+          
+          <!-- Total Budget Master Header Row with Carry-over Cash -->
+          <div id="budget-header-row">
+            <!-- Total Budget Master Header -->
+            <div class="card" id="budget-master-header" style="margin-bottom: 0;">
+              <div class="metric-bar-info" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--spacing-sm);">
+                <span id="budget-master-left-label" class="tabular-nums" style="font-weight: 700; font-size: 16px; color: var(--color-primary-accent); font-family: var(--font-family); font-variant-numeric: tabular-nums;">-- Remaining</span>
+                <span id="budget-master-spent-label" class="tabular-nums" style="font-size: 11px; color: var(--color-font-secondary); font-family: var(--font-family); font-variant-numeric: tabular-nums;">Spent: -- of --</span>
+              </div>
+              <div class="progress-bar-container" style="height: 8px; border-radius: 4px; background-color: var(--color-surface-variant); overflow: hidden; margin-top: 0;">
+                <div class="progress-bar-fill" id="budget-master-progress-fill" style="width: 0%; height: 100%; border-radius: 4px; transition: width 0.4s var(--transition-glide);"></div>
+              </div>
+            </div>
+
+            <!-- Carry-over Cash Card -->
+            <div class="card" id="carry-over-card" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md);">
+              <div>
+                <h3 style="margin-bottom: 2px; font-size: 13px; color: var(--color-font-primary);">Carry-over Cash (Next Month)</h3>
+                <span class="text-meta" style="font-size: 10px; color: var(--color-font-secondary);">Reserved for start of next month</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                <button class="wizard-adjust-btn btn-minus" id="carry-over-minus" title="Decrease carry-over by $10">−</button>
+                <div class="wizard-editable-value tabular-nums" id="carry-over-val" style="font-weight: 700; font-size: 15px; cursor: pointer; border-bottom: 1px dashed currentColor; padding: 2px 6px; color: var(--color-carry-over);">
+                  $0.00
+                </div>
+                <button class="wizard-adjust-btn btn-plus" id="carry-over-plus" title="Increase carry-over by $10">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tracking-grid" id="budget-groups-container">
+            <!-- Dynamic Category Blocks injected here -->
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 3: SAVINGS GOALS ==================== -->
+        <section class="app-view" id="view-savings">
+          <div class="card-title-row">
+            <h1>Savings Target Structures</h1>
+          </div>
+
+          <!-- Savings Progress Metrics -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:var(--spacing-md); margin-bottom:var(--spacing-md);">
+            <div class="card" style="margin-bottom:0; padding:var(--spacing-md); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <span class="text-meta" style="margin-bottom: var(--spacing-xs);">Allocated This Month</span>
+              <div style="display:flex; align-items:center; justify-content:center; gap:var(--spacing-md); width: 100%;">
+                <div style="width: 60px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                  <svg width="60" height="35" viewBox="0 0 60 35">
+                    <!-- Background Arc -->
+                    <path d="M 8 30 A 22 22 0 0 1 52 30" fill="none" stroke="var(--color-surface-variant)" stroke-width="4.5" stroke-linecap="round" />
+                    <!-- Foreground Active Arc (Gold) -->
+                    <path id="savings-allocated-arc-fill" d="M 8 30 A 22 22 0 0 1 52 30" fill="none" stroke="var(--color-savings-gold)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="69.1" stroke-dashoffset="69.1" style="transition: stroke-dashoffset 0.5s var(--transition-glide);" />
+                  </svg>
+                </div>
+                <div style="text-align:left; display: flex; flex-direction: column;">
+                  <div class="metric-large-num amount-positive tabular-nums" id="savings-month-allocated" style="margin:0; font-size: 18px; line-height: 1.2;">$0.00</div>
+                  <span class="text-meta" id="savings-month-goal-lbl" style="font-size:10px; margin-top: 2px;">Goal: $0.00</span>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:0; text-align:center; padding:var(--spacing-md); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <span class="text-meta" style="margin-bottom: var(--spacing-xs);">Combined Savings Balance</span>
+              <div class="metric-large-num tabular-nums" id="savings-combined-balance" style="color:var(--color-secondary-accent); margin:0;">$0.00</div>
+              <span class="text-meta" style="font-size:10px; margin-top: 2px;">Across all savings blocks</span>
+            </div>
+            <div class="card" style="margin-bottom:0; text-align:center; padding:var(--spacing-md); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <span class="text-meta" style="margin-bottom: var(--spacing-xs);">Free Cash Available</span>
+              <div class="metric-large-num tabular-nums" id="savings-free-cash" style="color:var(--color-success); margin:0;">$0.00</div>
+              <span class="text-meta" style="font-size:10px; margin-top: 2px;">Available to save</span>
+            </div>
+          </div>
+
+
+          <!-- Savings account blocks -->
+          <div class="tracking-grid" id="savings-accounts-container">
+            <!-- Dynamic Savings blocks -->
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 4: INCOME & DEBTS ==================== -->
+        <section class="app-view" id="view-debts">
+          <!-- TOP HALF UI: Income Success Dashboard -->
+          <div class="card" id="income-success-header">
+            <div class="card-title-row" style="margin-bottom: var(--spacing-sm); display: flex; justify-content: space-between; align-items: center;">
+              <h2>Income Performance Dashboard</h2>
+              <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+                <span class="text-meta tabular-nums" id="income-celebration-badge" style="background-color: var(--color-success); color:#fff; padding: 2px 8px; border-radius: 10px; display:none; font-weight:600; font-size:10px; margin-right: 6px;">Goal Achieved!</span>
+                <div class="pill-group" style="margin-bottom: 0;">
+                  <button class="pill-btn active" id="income-scope-month" onclick="window.setIncomeScope('month')">Month</button>
+                  <button class="pill-btn" id="income-scope-year" onclick="window.setIncomeScope('year')">Year</button>
+                  <button class="pill-btn" id="income-scope-all" onclick="window.setIncomeScope('all-time')">All-Time</button>
+                </div>
+              </div>
+            </div>
+            <div class="metric-bar-info" id="debts-income-progress-info">
+              <span>Earned Income: --</span>
+              <span>Objective: --</span>
+            </div>
+            <div class="progress-bar-container" id="debts-income-progress-container" style="margin-bottom: var(--spacing-xs); display: flex;">
+              <div class="progress-bar-fill progress-normal" id="debts-income-progress-fill" style="width:0%"></div>
+            </div>
+            <div id="debts-income-legend" class="cash-allocation-legend" style="margin-bottom: var(--spacing-md); display: flex; flex-wrap: wrap; gap: var(--spacing-sm) var(--spacing-md); font-size: 11px;"></div>
+            <div style="font-size:24px; font-weight:700; color:var(--color-primary-accent); margin-bottom:var(--spacing-md);" id="debts-income-total">$0.00</div>
+            
+            <h3 style="margin-bottom:var(--spacing-sm); font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-font-secondary);">Income Ledger Logs</h3>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="income-register-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tithing Tracker Section -->
+          <div class="card" id="tithing-tracker-card" style="margin-bottom: var(--spacing-md); padding: var(--spacing-md);">
+            <div class="card-title-row" style="margin-bottom: var(--spacing-sm); display: flex; justify-content: space-between; align-items: center;">
+              <h2>Tithing Ledger</h2>
+              <div style="display: flex; gap: var(--spacing-md); align-items: center;">
+                <span class="text-meta">Accumulated: <strong id="tithing-accumulated-lbl" class="tabular-nums" style="color:var(--color-primary-accent);">$0.00</strong></span>
+                <span class="text-meta">Total Owed: <strong id="tithing-owed-lbl" class="tabular-nums" style="color:var(--color-alert); font-weight:700;">$0.00</strong></span>
+              </div>
+            </div>
+            <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Reference / Details</th>
+                    <th>Amount</th>
+                    <th>Running Owed</th>
+                  </tr>
+                </thead>
+                <tbody id="tithing-ledger-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- BOTTOM HALF UI: Debts, Receivables, and Payables Tracker -->
+          <div class="debt-tracker-row">
+            <!-- Left Component: Payables Ledger -->
+            <div class="card" style="padding:var(--spacing-md);">
+              <div class="card-title-row">
+                <h2>Payables (Owed Out)</h2>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Liability Entity</th>
+                      <th>Owed</th>
+                      <th>Logged</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="payables-tbody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right Component: Receivables Ledger -->
+            <div class="card" style="padding:var(--spacing-md);">
+              <div class="card-title-row">
+                <h2>Receivables (Owed In)</h2>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Receivable Entity</th>
+                      <th>Owed</th>
+                      <th>Logged</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="receivables-tbody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 5: ANALYTICS ==================== -->
+        <section class="app-view" id="view-analytics" style="padding-bottom: 120px;">
+          <div class="card-title-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+            <h1>Analytics Insight Engine</h1>
+            <div class="timeframe-control-bar" id="analytics-timeframe-bar" style="display:flex; gap: 4px; background: var(--color-surface-variant); padding: 2px; border-radius: var(--border-radius-sm); border: 1px solid var(--color-border);">
+              <button class="timeframe-btn" data-duration="all-time">All-Time</button>
+              <button class="timeframe-btn active" data-duration="year" style="background-color: var(--color-primary-accent); color: var(--color-base-canvas);">Year</button>
+              <button class="timeframe-btn" data-duration="month">Month</button>
+            </div>
+          </div>
+
+          <!-- Segment buttons (Main Trackers) -->
+          <div class="segment-control-bar" id="analytics-segment-bar" style="margin-bottom: var(--spacing-md);">
+            <button class="segment-btn active" data-segment="income">Income Tracker</button>
+            <button class="segment-btn" data-segment="expense">Expense Tracker</button>
+            <button class="segment-btn" data-segment="net">Net Tracker</button>
+            <button class="segment-btn" data-segment="savings">Savings Tracker</button>
+            <button class="segment-btn" data-segment="avg-spent">Average Spent Per Day</button>
+          </div>
+
+          <!-- Header Summary Cards Row -->
+          <div class="analytics-summary-row">
+            <div class="card" style="padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-xs); background: var(--color-surface-variant); border: 1px solid var(--color-border); border-radius: var(--border-radius-md);">
+              <span style="font-size: 11px; font-weight: 600; color: var(--color-font-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Total Income</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                <span id="analytics-summary-income" class="tabular-nums" style="font-size: 24px; font-weight: 700; color: var(--color-font-primary);">$0.00</span>
+                <span id="analytics-summary-income-badge"></span>
+              </div>
+            </div>
+            <div class="card" style="padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-xs); background: var(--color-surface-variant); border: 1px solid var(--color-border); border-radius: var(--border-radius-md);">
+              <span style="font-size: 11px; font-weight: 600; color: var(--color-font-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Total Expenses</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                <span id="analytics-summary-expenses" class="tabular-nums" style="font-size: 24px; font-weight: 700; color: var(--color-font-primary);">$0.00</span>
+                <span id="analytics-summary-expenses-badge"></span>
+              </div>
+            </div>
+            <div class="card" style="padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-xs); background: var(--color-surface-variant); border: 1px solid var(--color-border); border-radius: var(--border-radius-md);">
+              <span id="analytics-summary-savings-title" style="font-size: 11px; font-weight: 600; color: var(--color-font-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Net Savings</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                <span id="analytics-summary-savings" class="tabular-nums" style="font-size: 24px; font-weight: 700; color: var(--color-font-primary);">$0.00</span>
+                <span id="analytics-summary-savings-badge"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Layout Grid -->
+          <div class="analytics-layout-grid">
+            <!-- Left Side: Expense Categories Panel -->
+                <div class="analytics-categories-sidebar card" id="analytics-categories-panel" style="display: none; padding: var(--spacing-md); height: fit-content; margin-bottom: 0;">
+              <h2 style="font-size: 13px; margin-bottom: var(--spacing-sm);">Expense Filters</h2>
+              <div class="analytics-category-buttons" id="analytics-category-buttons-container" style="display: flex; flex-direction: column; gap: 6px;">
+                <!-- Dynamically generated buttons go here -->
+              </div>
+            </div>
+
+            <!-- Right Side: Chart Area -->
+            <div class="analytics-main-content" style="flex: 1; display: flex; flex-direction: column; gap: var(--spacing-md);">
+              <!-- Range Label Container (visible only in All-Time and Month views) -->
+              <div id="analytics-quarters-nav-label" style="display:none; justify-content:center; align-items:center; margin-bottom: 0;">
+                <span id="quarters-current-range" style="font-size: 11px; font-weight:600; color:var(--color-font-secondary); font-family:var(--font-family); background: var(--color-surface-variant); padding: 4px 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--color-border);">Q4 2024 - Q3 2026</span>
+              </div>
+
+              <!-- Full Screen Line Chart Container -->
+              <div class="analytics-fullscreen-chart-box" style="width:100%; min-height:380px; position:relative;">
+                <!-- Left Navigation Arrow (Prev) -->
+                <button id="quarters-prev-btn" class="timeframe-btn" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 28px; font-weight: 300; cursor: pointer; z-index: 10; display: none; align-items: center; justify-content: center; line-height: 1; padding: var(--spacing-sm); transition: color 0.2s;">&lt;</button>
+                
+                <!-- Right Navigation Arrow (Next) -->
+                <button id="quarters-next-btn" class="timeframe-btn" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 28px; font-weight: 300; cursor: pointer; z-index: 10; display: none; align-items: center; justify-content: center; line-height: 1; padding: var(--spacing-sm); transition: color 0.2s;">&gt;</button>
+
+                <div id="analytics-chart-container" style="width:100%; height:380px;">
+                  <!-- Custom SVG chart will load here -->
+                </div>
+                
+                <!-- Chart Legend -->
+                <div style="display:flex; justify-content:space-around; font-size:10px; font-weight:600; margin-top:var(--spacing-sm); padding: 0 20px;">
+                  <span style="color:var(--color-primary-accent); display:flex; align-items:center; gap:4px;">
+                    <span style="display:inline-block; width:12px; height:3px; background-color:var(--color-primary-accent);"></span> Actual Metrics
+                  </span>
+                  <span id="chart-legend-goal" style="color:var(--color-secondary-accent); display:flex; align-items:center; gap:4px;">
+                    <span style="display:inline-block; width:12px; height:3px; background-color:var(--color-secondary-accent); border-bottom:1px dashed var(--color-border);"></span> Target Goals
+                  </span>
+                  <span id="chart-legend-average" style="color:var(--color-alert); display:flex; align-items:center; gap:4px;">
+                    <span style="display:inline-block; width:12px; height:1px; border-bottom:1px dashed var(--color-alert);"></span> Selected Average
+                  </span>
+                </div>
+              </div>
+
+              <!-- Month Breakdown Container -->
+              <div class="card" id="analytics-breakdown-card" style="display: none; padding: var(--spacing-md); margin-top: var(--spacing-md); transition: opacity 0.3s;">
+                <div class="card-title-row" style="margin-bottom: var(--spacing-md);">
+                  <h2 id="breakdown-title" style="margin-bottom:0; font-size: 14px;">Month Cost Breakdown</h2>
+                  <span class="text-meta" id="breakdown-subtitle">Click a month node to change</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--spacing-md); align-items: center; justify-content: center; width: 100%;">
+                  <div id="breakdown-pie-container" style="width: 320px; height: 320px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"></div>
+                  <!-- Breakdown List Legend -->
+                  <div id="breakdown-list-legend" style="width: 100%; max-width: 600px; font-size: 12px; display: flex; justify-content: center;"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW 6: MONTH PLAN WIZARD ==================== -->
+        <section class="app-view" id="view-wizard">
+          <div class="card-title-row">
+            <h1>Month Plan Wizard</h1>
+          </div>
+
+          <div class="card" id="wizard-container" style="margin-bottom: var(--spacing-lg);">
+            <!-- Wizard Step Progress Bar -->
+            <div class="wizard-progress-bar-container" style="height: 6px; background-color: var(--color-surface-variant); border-radius: 3px; margin-bottom: var(--spacing-sm); overflow: hidden;">
+              <div id="wizard-progress-bar-fill" style="width: 25%; height: 100%; background-color: var(--color-success); transition: width 0.3s var(--transition-glide);"></div>
+            </div>
+            <div class="wizard-step-labels" style="display: flex; justify-content: space-between; font-size: 11px; color: var(--color-font-secondary); margin-bottom: var(--spacing-lg);">
+              <span id="wizard-step-lbl-1" class="tabular-nums" style="font-weight: 600; color: var(--color-primary-accent);">1. Budget Limits</span>
+              <span id="wizard-step-lbl-2" class="tabular-nums">2. Savings Goals</span>
+              <span id="wizard-step-lbl-3" class="tabular-nums">3. Income Target</span>
+              <span id="wizard-step-lbl-4" class="tabular-nums">4. Plan Summary</span>
+            </div>
+
+            <!-- Dynamic step content area -->
+            <div id="wizard-step-content" style="min-height: 300px; margin-bottom: var(--spacing-lg);">
+              <!-- Dynamic step templates will be rendered here by app.js -->
+            </div>
+
+            <!-- Wizard controls footer -->
+            <div class="wizard-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); padding-top: var(--spacing-md); margin-top: var(--spacing-md);">
+              <button class="btn-discard" id="btn-wizard-prev" style="padding: 10px 20px; display: none; line-height: 1; border-radius: var(--border-radius-sm);">Previous</button>
+              <div style="margin-left: auto; display: flex; gap: var(--spacing-md); align-items: center;">
+                <button class="btn-discard" id="btn-wizard-cancel" style="padding: 10px 20px; line-height: 1; border-radius: var(--border-radius-sm);">Cancel</button>
+                <button class="settings-btn" id="btn-wizard-update" style="padding: 10px 20px; line-height: 1; border-radius: var(--border-radius-sm); display: none;">Update Plan</button>
+                <button class="btn-save-exit" id="btn-wizard-next" style="padding: 10px 24px; line-height: 1; background-color: var(--color-success); color: white; border-radius: var(--border-radius-sm);">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+      </div> <!-- VIEWS VIEWPORT END -->
+
+      <!-- ==================== MOBILE NAVIGATION BAR ==================== -->
+      <nav class="mobile-nav-bar">
+        <button class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" data-view="ledger">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Ledger
+        </button>
+        <button class="nav-item" data-view="budget">
+          <svg viewBox="0 0 24 24"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H3V6h14v8zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm13 8h-2V7c0-1.1-.9-2-2-2H9V3c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2z"/></svg>
+          Budget
+        </button>
+        <button class="nav-item" data-view="savings">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Goals
+        </button>
+        <button class="nav-item" data-view="debts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="fill: none !important;"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Income
+        </button>
+        <button class="nav-item" data-view="analytics">
+          <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+          Trends
+        </button>
+      </nav>
+
+      <!-- ==================== GLOBAL "FLEX" FAB ==================== -->
+      <div class="flex-fab-container">
+        <!-- Floating Option List -->
+        <div class="flex-fab-options">
+          <button class="fab-option-btn" data-action="expense">
+            <svg class="fab-option-icon" viewBox="0 0 24 24"><path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add Expense
+          </button>
+          <button class="fab-option-btn" data-action="income">
+            <svg class="fab-option-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Record Income
+          </button>
+          <button class="fab-option-btn" data-action="savings">
+            <svg class="fab-option-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Savings Account
+          </button>
+          <button class="fab-option-btn" data-action="debt">
+            <svg class="fab-option-icon" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-2.5.54-4.5 2.13-4.5 4.64 0 2.71 2.29 4.05 5.6 4.81 2.6.6 3 1.49 3 2.5 0 1.13-1.01 1.93-2.7 1.93-2 0-2.82-.9-2.9-2.2H6.2c.08 2.07 1.73 3.7 3.8 4.18V21h3v-2.18c2.5-.54 4.5-2.06 4.5-4.63 0-3.22-2.7-4.29-5.7-4.89z"/></svg>
+            Debt Ledger
+          </button>
+        </div>
+        
+        <!-- Main FAB button -->
+        <button class="flex-fab-main" title="Active Flow Process Menu">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+        </button>
+      </div>
+
+    </main>
+
+  </div> <!-- APP CONTAINER END -->
+
+  <!-- ==================== OVERLAYS & MODAL DIALOGS ==================== -->
+  
+  <div class="fullscreen-overlay" id="form-overlay-container">
+    
+    <!-- A. ADD EXPENSE DRAWER -->
+    <div class="form-drawer" id="drawer-expense">
+      <header class="drawer-header">
+        <span class="drawer-title">Add Expense Allocation</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <div class="form-group">
+          <label class="form-label">Expense Date</label>
+          <input type="date" class="form-input" id="exp-date" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Category Group</label>
+          <select class="form-input" id="exp-group" required>
+            <option value="">-- Choose Category --</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Sub-Category Child</label>
+          <select class="form-input" id="exp-subgroup" required>
+            <option value="">-- Select Subgroup --</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="exp-amount" placeholder="0.00" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Description Note</label>
+          <input type="text" class="form-input" id="exp-desc" placeholder="Details or rationale...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Fund Source (Savings Account)</label>
+          <select class="form-input" id="exp-drain-savings">
+            <option value="">-- None (Deduct from Free Cash) --</option>
+          </select>
+        </div>
+      </div>
+      
+      <footer class="drawer-footer">
+        <button class="btn-discard">Discard</button>
+        <button class="btn-save-new" id="btn-save-new-expense">Save & New</button>
+        <button class="btn-save-exit" id="btn-save-expense">Save & Exit</button>
+      </footer>
+    </div>
+
+    <!-- B. RECORD INCOME DRAWER -->
+    <div class="form-drawer" id="drawer-income">
+      <header class="drawer-header">
+        <span class="drawer-title">Record Asset Inflow</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <div class="form-group">
+          <label class="form-label">Inflow Date</label>
+          <input type="date" class="form-input" id="inc-date" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Source Entity Name</label>
+          <select class="form-input" id="inc-source-select" required style="margin-bottom: var(--spacing-sm);">
+            <option value="" disabled selected>-- Select Source --</option>
+            <option value="Black Bear Sprinkler Repair">Black Bear Sprinkler Repair</option>
+            <option value="BYU Research">BYU Research</option>
+            <option value="BYU TA">BYU TA</option>
+            <option value="Piano Tuning">Piano Tuning</option>
+            <option value="Loan">Loan</option>
+            <option value="Scholarship">Scholarship</option>
+            <option value="Gift">Gift</option>
+            <option value="Help">Help</option>
+            <option value="__NEW__">Other / Add New Source...</option>
+          </select>
+          <div id="inc-source-new-container" style="display: none;">
+            <input type="text" class="form-input" id="inc-source" placeholder="Enter custom source name...">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="inc-amount" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; gap: var(--spacing-xs); margin-bottom: var(--spacing-md);">
+          <input type="checkbox" id="inc-tithable" style="width: auto; margin-bottom: 0;">
+          <label class="form-label" for="inc-tithable" style="margin-bottom: 0; cursor: pointer; font-weight: 500;">Tithable Income (10% Owed)</label>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Notes Description</label>
+          <input type="text" class="form-input" id="inc-desc" placeholder="Details or origin reference...">
+        </div>
+      </div>
+      
+      <footer class="drawer-footer">
+        <button class="btn-discard">Discard</button>
+        <button class="btn-save-new" id="btn-save-new-income">Save & New</button>
+        <button class="btn-save-exit" id="btn-save-income">Save & Exit</button>
+      </footer>
+    </div>
+
+    <!-- C. ADD SAVINGS BLOCK DRAWER -->
+    <div class="form-drawer" id="drawer-savings">
+      <header class="drawer-header">
+        <span class="drawer-title">Add Savings Account Target</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <div class="form-group">
+          <label class="form-label">Savings Block Name</label>
+          <input type="text" class="form-input" id="sav-name" placeholder="Emergency Fund, House Deposit..." required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Target Completion Amount</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="sav-target" placeholder="0.00 (Optional)">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Deadline Date</label>
+          <input type="date" class="form-input" id="sav-deadline">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Initial Funding Amount</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="sav-amount" placeholder="0.00" required>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="drawer-footer" style="grid-template-columns: 80px 1fr;">
+        <button class="btn-discard">Discard</button>
+        <button class="btn-save-exit" id="btn-save-savings">Save & Create</button>
+      </footer>
+    </div>
+
+    <!-- D. ADD DEBT / CLAIM DRAWER -->
+    <div class="form-drawer" id="drawer-debt">
+      <header class="drawer-header">
+        <span class="drawer-title">Log Liability or Claim</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <div class="form-group">
+          <label class="form-label">Record Type</label>
+          <select class="form-input" id="debt-type" required>
+            <option value="Payable">Payable (Owed to others)</option>
+            <option value="Receivable">Receivable (Others owe you)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Entity / Rationale Description</label>
+          <input type="text" class="form-input" id="debt-desc" placeholder="Car Loan, Brother laptop money..." required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Baseline Principal Owed</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="debt-amount" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Logged Date</label>
+          <input type="date" class="form-input" id="debt-date" required>
+        </div>
+      </div>
+      
+      <footer class="drawer-footer" style="grid-template-columns: 80px 1fr;">
+        <button class="btn-discard">Discard</button>
+        <button class="btn-save-exit" id="btn-save-debt">Save & Log Ledger</button>
+      </footer>
+    </div>
+
+    <!-- E. SETTLE DEBT DRAWER -->
+    <div class="form-drawer" id="drawer-settle">
+      <header class="drawer-header">
+        <span class="drawer-title">Log Settlement Payment</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <input type="hidden" id="settle-debt-id">
+        <div class="form-group">
+          <label class="form-label">Settling Target Owed Entity</label>
+          <div style="font-weight:700; color:var(--color-primary-accent); margin-bottom:var(--spacing-md);" id="settle-debt-desc">--</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Payment Amount</label>
+          <div class="amount-wrapper">
+            <span class="amount-symbol">$</span>
+            <input type="text" class="form-input amount-field" id="settle-amount" placeholder="0.00" required>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="drawer-footer" style="grid-template-columns: 80px 1fr;">
+        <button class="btn-discard">Discard</button>
+        <button class="btn-save-exit" id="btn-save-settle">Record Payment</button>
+      </footer>
+    </div>
+
+    <!-- F. GOOGLE SHEETS SETTINGS DRAWER -->
+    <div class="form-drawer" id="drawer-settings">
+      <header class="drawer-header">
+        <span class="drawer-title">Google Sheets Connection</span>
+        <button class="info-btn close-drawer-btn" style="border:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </header>
+      
+      <div class="drawer-body">
+        <p class="text-meta" style="margin-bottom:var(--spacing-md); line-height:1.4;">
+          Synchronize data with Google Sheets. Connecting establishes a secure client-side integration via Google OAuth API. You retain absolute ownership of the workbook.
+        </p>
+
+        <div class="form-group" style="margin-bottom:var(--spacing-md);">
+          <label class="form-label" style="font-size: 11px;">Google OAuth Client ID</label>
+          <div style="display: flex; gap: var(--spacing-sm);">
+            <input type="text" class="form-input" id="google-client-id-input" placeholder="Paste your Client ID here..." style="font-size:12px; flex: 1; padding: 8px;">
+            <button class="settings-btn" id="btn-save-client-id" style="padding: 8px 12px; font-size:12px; border-radius: var(--border-radius-sm); white-space: nowrap;">Save ID</button>
+          </div>
+        </div>
+
+        <div class="card" style="background-color:var(--color-surface-variant); padding:var(--spacing-md); margin-bottom:var(--spacing-lg);">
+          <div id="google-status-lbl" style="font-size:12px; font-weight:600; line-height:1.4;">
+            Google Account Status: Checking connection...
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-bottom: var(--spacing-sm);">
+          <span id="login-status-dot" style="width: 10px; height: 10px; border-radius: 50%; display: inline-block; background-color: var(--color-font-secondary); transition: background-color 0.3s; flex-shrink: 0;"></span>
+          <button class="settings-btn" id="btn-google-connect" style="flex: 1; padding: 12px; margin-bottom: 0;">Sign In</button>
+        </div>
+        <button class="btn-discard" id="btn-google-disconnect" style="width:100%; display:none; padding:12px; font-size:12px;">Disconnect Sheets API</button>
+      </div>
+
+      <footer class="drawer-footer" style="grid-template-columns: 1fr;">
+        <button class="btn-save-exit close-drawer-btn" style="padding:12px;">Close</button>
+      </footer>
+    </div>
+
+  </div> <!-- FORM OVERLAY END -->
+
+  <!-- SUCCESS ANIMATION CHECKMARK OVERLAY -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="success-checkmark-circle">
+      <svg viewBox="0 0 52 52">
+        <path d="M14 27l8 8 16-16" />
+      </svg>
+    </div>
+    <span class="success-text" id="success-text-lbl">Entry Saved Successfully</span>
+  </div>
+
+  <!-- CUSTOM CONFIRMATION DIALOG BACKDROP -->
+  <div class="modal-backdrop" id="modal-backdrop" style="z-index: 1100;">
+    <div class="confirm-modal">
+      <div class="modal-title" id="confirm-modal-title">Confirm Action</div>
+      <div class="modal-desc" id="confirm-modal-desc">Are you sure you want to perform this action?</div>
+      <div class="modal-actions">
+        <button class="modal-btn-cancel" id="confirm-modal-no">Cancel</button>
+        <button class="modal-btn-confirm" id="confirm-modal-yes">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVINGS TRANSFER DETAILS MODAL -->
+  <div class="modal-backdrop" id="sav-transfer-modal-backdrop">
+    <div class="confirm-modal" style="max-width: 400px; text-align: left;">
+      <div class="modal-title" style="border-bottom: 1px solid var(--color-border); padding-bottom: var(--spacing-sm); margin-bottom: var(--spacing-md); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 16px; font-weight: 700;">Edit Allocation History</span>
+        <span id="sav-transfer-type-badge" style="padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 10px; background-color: var(--color-secondary-accent);">Savings Transfer</span>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+        <input type="hidden" id="sav-transfer-ref-id">
+        <input type="hidden" id="sav-transfer-account-id">
+        
+        <div class="form-group">
+          <label class="form-label">Transfer Date</label>
+          <input type="date" class="form-input" id="sav-transfer-date" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <div class="amount-wrapper" style="position: relative;">
+            <span class="amount-symbol" style="left: 8px; font-size: 11px;">$</span>
+            <input type="text" class="form-input amount-field" id="sav-transfer-amount" placeholder="0.00" required>
+          </div>
+          <span class="text-helper" style="font-size: 10px; margin-top: 4px; display: block;" id="sav-transfer-direction-lbl">Positive for deposit, negative for withdrawal.</span>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; gap: var(--spacing-sm);">
+        <button class="modal-btn-cancel" id="sav-transfer-modal-close" style="flex: 1; padding: 8px;">Cancel</button>
+        <button class="settings-btn" id="sav-transfer-modal-save" style="background-color: var(--color-secondary-accent); flex: 1; padding: 8px; font-size: 13px;">Save</button>
+        <button class="modal-btn-confirm" id="sav-transfer-modal-delete" style="flex: 1; padding: 8px;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTION DETAILS MODAL -->
+  <div class="modal-backdrop" id="details-modal-backdrop">
+    <div class="confirm-modal" style="max-width: 400px; text-align: left;">
+      <div class="modal-title" style="border-bottom: 1px solid var(--color-border); padding-bottom: var(--spacing-sm); margin-bottom: var(--spacing-md); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 16px; font-weight: 700;">Transaction Details</span>
+        <span id="details-type-badge" style="padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 10px;">Expense</span>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+        <div style="display: grid; grid-template-columns: 80px 1fr; gap: var(--spacing-sm); font-size: 13px;">
+          <span style="color: var(--color-font-secondary);">Date:</span>
+          <span id="details-date" style="font-weight: 600;">--</span>
+          
+          <span id="details-category-label" style="color: var(--color-font-secondary);">Category:</span>
+          <span id="details-category" style="font-weight: 600;">--</span>
+          
+          <span id="details-subgroup-label" style="color: var(--color-font-secondary);">Subgroup:</span>
+          <span id="details-subgroup" style="font-weight: 600;">--</span>
+          
+          <span style="color: var(--color-font-secondary);">Amount:</span>
+          <span id="details-amount" style="font-weight: 700; font-size: 15px;">--</span>
+          
+          <span id="details-fund-label" style="color: var(--color-font-secondary); display: none;">Fund Source:</span>
+          <span id="details-fund" style="font-weight: 600; display: none; color: var(--color-savings-gold);">--</span>
+
+          <span style="color: var(--color-font-secondary);">Note:</span>
+          <span id="details-note" style="color: var(--color-font-primary); font-style: italic; word-break: break-word;">--</span>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; gap: var(--spacing-sm);">
+        <button class="modal-btn-cancel" id="details-modal-close" style="flex: 1; padding: 8px;">Close</button>
+        <button class="settings-btn" id="details-modal-edit" style="background-color: var(--color-secondary-accent); flex: 1; padding: 8px; font-size: 13px;">Edit</button>
+        <button class="modal-btn-confirm" id="details-modal-delete" style="flex: 1; padding: 8px;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPULAR INFO POPOVER CONTAINER -->
+  <div class="popover-container" id="popover-container">
+    <div class="popover-card">
+      <div class="popover-title" id="popover-title-lbl">Popover Title</div>
+      <div class="popover-body" id="popover-body-lbl">Description notes text content is placed inside this block.</div>
+    </div>
+  </div>
+
+  <!-- Load script files sequentially to bypass module CORS constraints in local files -->
+  <script src="utils.js"></script>
+  <script src="db.js"></script>
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
