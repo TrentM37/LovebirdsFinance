@@ -22,7 +22,7 @@
       return false;
     };
   </script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lovebirds Finance</title>
   
   <!-- CSS Link -->
@@ -30,14 +30,17 @@
   
   <!-- Google Sign-In Identity Services Library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  
+
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="apple-touch-icon" href="icon.png">
-  
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lovebirds">
+<link rel="apple-touch-icon" href="icon.png">
+
 </head>
 <body>
+  <!-- Global Month Picker Input (body level to prevent display:none constraints) -->
+  <input type="month" id="global-month-picker" style="position: fixed; top: 10px; left: 10px; width: 1px; height: 1px; opacity: 0; z-index: -1; border: none; padding: 0;">
 
   <div class="app-container">
     
@@ -57,7 +60,7 @@
       
       <!-- Desktop Sidebar Month Selector -->
       <div class="sidebar-cycle-selector" style="padding: 0 var(--spacing-md); margin-bottom: var(--spacing-lg);">
-        <button class="month-selector-btn" style="width: 100%; justify-content: center; background-color: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--color-base-canvas);" onclick="document.getElementById('global-month-picker').showPicker()">
+        <button class="month-selector-btn" style="width: 100%; justify-content: center; background-color: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--color-base-canvas);">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="margin-right: 6px;"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
           <span id="desktop-month-label">--</span>
         </button>
@@ -120,12 +123,9 @@
           <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em;">Lovebirds</span>
         </div>
         
-        <!-- Hidden input month picker -->
-        <input type="month" id="global-month-picker" style="opacity:0; position:absolute; pointer-events:none;">
-
         <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
           <!-- Combined Month Selector Pill -->
-          <button class="month-selector-btn" onclick="document.getElementById('global-month-picker').showPicker()" style="font-weight: 700; color: var(--color-primary-accent); padding: 5px 10px; font-size: 12px; gap: 4px;">
+          <button class="month-selector-btn" style="font-weight: 700; color: var(--color-primary-accent); padding: 5px 10px; font-size: 12px; gap: 4px;">
             <span id="current-month-label">--</span>
             <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
           </button>
@@ -194,7 +194,7 @@
             <div class="cash-allocation-legend">
               <div class="legend-item">
                 <span class="legend-dot dot-free"></span>
-                <span class="legend-label">Free Cash (Unreserved): <strong id="cash-legend-free" class="tabular-nums">$0.00</strong></span>
+                <span class="legend-label">Free Cash: <strong id="cash-legend-free" class="tabular-nums">$0.00</strong></span>
               </div>
               <div class="legend-item">
                 <span class="legend-dot dot-expected"></span>
@@ -202,7 +202,7 @@
               </div>
               <div class="legend-item">
                 <span class="legend-dot dot-savings"></span>
-                <span class="legend-label">Savings Cash (Locked): <strong id="cash-legend-savings" class="tabular-nums">$0.00</strong></span>
+                <span class="legend-label">Savings Cash: <strong id="cash-legend-savings" class="tabular-nums">$0.00</strong></span>
               </div>
               <div class="legend-item">
                 <span class="legend-dot dot-carry-over"></span>
@@ -652,7 +652,7 @@
       <nav class="mobile-nav-bar">
         <button class="nav-item active" data-view="dashboard">
           <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          Dashboard
+          Home
         </button>
         <button class="nav-item" data-view="ledger">
           <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>

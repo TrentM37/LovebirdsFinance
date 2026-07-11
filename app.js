@@ -325,6 +325,27 @@ function bindMonthSelector() {
     const dLabel = document.getElementById('desktop-month-label');
     if (dLabel) dLabel.textContent = readableMonth;
 
+    // Bind click events on all selector buttons programmatically
+    const selectorBtns = document.querySelectorAll('.month-selector-btn');
+    selectorBtns.forEach(btn => {
+      // Skip status buttons which have their own logic
+      if (btn.id === 'btn-header-login-status' || btn.id === 'btn-sidebar-login-status') return;
+      
+      if (!btn.dataset.boundSelector) {
+        btn.dataset.boundSelector = "true";
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          try {
+            monthInput.showPicker();
+          } catch (err) {
+            console.error("Native showPicker failed, fallback focus:", err);
+            monthInput.focus();
+            monthInput.click();
+          }
+        });
+      }
+    });
+
     monthInput.addEventListener('change', async (e) => {
       const val = e.target.value; // YYYY-MM
       if (!val) return;
@@ -4908,18 +4929,7 @@ function bindSettings() {
 
   // Handle header status button or sidebar status button clicks
   const handleStatusButtonClick = () => {
-    if (db.isGoogleConnected()) {
-      showSettingsModal();
-    } else {
-      if (typeof google === 'undefined') {
-        alert("Google Identity Services library is not loaded. Check your internet connection.");
-        return;
-      }
-      initClient();
-      if (tokenClient) {
-        tokenClient.requestAccessToken();
-      }
-    }
+    showSettingsModal();
   };
 
   const headerLoginBtn = document.getElementById('btn-header-login-status');

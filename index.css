@@ -154,7 +154,7 @@ h3 {
   height: 100%;
   background-color: var(--color-base-canvas);
   overflow-y: auto;
-  padding: var(--spacing-md) var(--spacing-md) 80px var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-md) calc(80px + env(safe-area-inset-bottom)) var(--spacing-md);
   will-change: transform, opacity;
   display: none;
 }
@@ -203,7 +203,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md);
+  padding: calc(var(--spacing-md) + env(safe-area-inset-top)) var(--spacing-md) var(--spacing-md) var(--spacing-md);
   background-color: var(--color-surface-card);
   border-bottom: 1px solid var(--color-border);
   z-index: 10;
@@ -484,7 +484,8 @@ h3 {
   display: flex;
   background-color: var(--color-primary-accent);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -1833,12 +1834,16 @@ h3 {
 
 @media (max-width: 600px) {
   .liquid-assets-row {
+    display: flex !important;
+    flex-direction: row !important;
     gap: var(--spacing-xs) !important;
   }
   
   .asset-card {
+    flex: 1 !important;
     padding: 8px var(--spacing-sm) !important;
     gap: var(--spacing-xs) !important;
+    min-width: 0 !important;
   }
   
   .asset-icon-box {
@@ -1866,6 +1871,13 @@ h3 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .cash-allocation-legend {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--spacing-xs) !important;
+    font-size: 10px !important;
   }
 }
 
