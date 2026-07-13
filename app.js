@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize Welcome / Splash Screen Gate
   const welcomeScreen = document.getElementById('welcome-screen');
-  const welcomeSandboxBtn = document.getElementById('welcome-btn-sandbox');
 
   if (welcomeScreen) {
     if (db.isGoogleConnected()) {
@@ -91,14 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Google not connected, keep user locked on the splash page until bypass/sign-in
       welcomeScreen.classList.remove('hidden');
     }
-  }
-
-  if (welcomeSandboxBtn) {
-    welcomeSandboxBtn.addEventListener('click', () => {
-      if (welcomeScreen) {
-        welcomeScreen.classList.add('hidden');
-      }
-    });
   }
 });
 
@@ -3660,6 +3651,12 @@ function bindForms() {
 
   document.querySelectorAll('.btn-discard, .close-drawer-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      // If closing settings drawer, bypass confirmation and close instantly
+      if (btn.closest('#drawer-settings')) {
+        closeFormDrawer();
+        return;
+      }
+      
       showConfirmModal(
         "Discard In-Progress Entry?",
         "Are you sure you want to cancel? Any unsaved edits will be deleted.",
@@ -4141,6 +4138,12 @@ function showConfirmModal(title, desc, onConfirm, onCancel = null) {
 
   btnYes.parentNode.replaceChild(newYes, btnYes);
   btnNo.parentNode.replaceChild(newNo, btnNo);
+
+  // Reset text and display states in case a warning modal modified them
+  newYes.textContent = "Confirm";
+  newYes.style.display = "";
+  newNo.textContent = "Cancel";
+  newNo.style.display = "";
 
   newYes.addEventListener('click', () => {
     backdrop.classList.remove('active');
