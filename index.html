@@ -33,7 +33,8 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1e352f" id="theme-color-meta">
 <meta name="apple-mobile-web-app-title" content="Lovebirds">
 <link rel="apple-touch-icon" href="icon.png">
 
@@ -788,7 +789,7 @@
           <label class="form-label">Amount</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="exp-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="exp-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
         </div>
         
@@ -850,7 +851,7 @@
           <label class="form-label">Amount</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="inc-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="inc-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
         </div>
 
@@ -891,7 +892,7 @@
           <label class="form-label">Target Completion Amount</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="sav-target" placeholder="0.00 (Optional)">
+            <input type="text" class="form-input amount-field" id="sav-target" placeholder="0.00 (Optional)" inputmode="decimal">
           </div>
         </div>
 
@@ -904,7 +905,7 @@
           <label class="form-label">Initial Funding Amount</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="sav-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="sav-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
         </div>
       </div>
@@ -942,7 +943,7 @@
           <label class="form-label">Baseline Principal Owed</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="debt-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="debt-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
         </div>
 
@@ -978,7 +979,7 @@
           <label class="form-label">Payment Amount</label>
           <div class="amount-wrapper">
             <span class="amount-symbol">$</span>
-            <input type="text" class="form-input amount-field" id="settle-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="settle-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
         </div>
       </div>
@@ -1070,7 +1071,7 @@
           <label class="form-label">Amount</label>
           <div class="amount-wrapper" style="position: relative;">
             <span class="amount-symbol" style="left: 8px; font-size: 11px;">$</span>
-            <input type="text" class="form-input amount-field" id="sav-transfer-amount" placeholder="0.00" required>
+            <input type="text" class="form-input amount-field" id="sav-transfer-amount" placeholder="0.00" inputmode="decimal" required>
           </div>
           <span class="text-helper" style="font-size: 10px; margin-top: 4px; display: block;" id="sav-transfer-direction-lbl">Positive for deposit, negative for withdrawal.</span>
         </div>

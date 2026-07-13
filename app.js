@@ -85,10 +85,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Keep overlay active for a brief split-second (1.5s) to show the animated entry
       setTimeout(() => {
         welcomeScreen.classList.add('hidden');
+        const themeMeta = document.getElementById('theme-color-meta');
+        if (themeMeta) themeMeta.setAttribute('content', '#f9f6f0');
       }, 1500);
     } else {
       // Google not connected, keep user locked on the splash page until bypass/sign-in
       welcomeScreen.classList.remove('hidden');
+      const themeMeta = document.getElementById('theme-color-meta');
+      if (themeMeta) themeMeta.setAttribute('content', '#1e352f');
     }
   }
 });
@@ -922,7 +926,7 @@ async function renderBudgetView() {
       if (carryOverValEl.querySelector('input')) return;
 
       const currentVal = getCarryOverCashVal();
-      carryOverValEl.innerHTML = `<span style="font-size:12px; font-weight:700;">$</span><input type="text" class="wizard-inline-input" value="${currentVal.toFixed(2)}" style="width: 70px; height: 22px; font-size: 12px; padding: 0 4px;">`;
+      carryOverValEl.innerHTML = `<span style="font-size:12px; font-weight:700;">$</span><input type="text" class="wizard-inline-input" value="${currentVal.toFixed(2)}" inputmode="decimal" style="width: 70px; height: 22px; font-size: 12px; padding: 0 4px;">`;
       const input = carryOverValEl.querySelector('input');
       input.focus();
       input.select();
@@ -1029,7 +1033,7 @@ async function renderBudgetView() {
               <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Limit Amount</label>
               <div class="amount-wrapper" style="position: relative;">
                 <span class="amount-symbol" style="left: 8px; font-size: 11px;">$</span>
-                <input type="text" class="form-input amount-field budget-limit-amount" id="budget-limit-amount-${groupName.replace(/\s+/g, '-')}" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
+                <input type="text" class="form-input amount-field budget-limit-amount" id="budget-limit-amount-${groupName.replace(/\s+/g, '-')}" inputmode="decimal" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
               </div>
             </div>
             <button class="settings-btn" onclick="window.updateMonthlyBudgetLimit('${groupName}')" style="padding: 6px 12px; font-size: 11px; height: 28px; line-height: 1; display: flex; align-items: center; border-radius: var(--border-radius-sm);">Update Limit</button>
@@ -1234,7 +1238,7 @@ async function renderSavingsView() {
             <span class="text-meta">Adjust Balance</span>
             <div class="form-group amount-wrapper" style="margin-bottom: 0; position: relative;">
               <span class="amount-symbol" style="left: 8px; font-size: 11px;">$</span>
-              <input type="text" class="form-input amount-field savings-adj-amount" id="savings-adj-amount-${accId}" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
+              <input type="text" class="form-input amount-field savings-adj-amount" id="savings-adj-amount-${accId}" inputmode="decimal" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
             </div>
             <div style="display: flex; gap: var(--spacing-sm); margin-top: 4px;">
               <button class="settings-btn" onclick="window.adjustSavingsAccountFunds('${accId}', 'add')" style="padding: 6px; font-size: 11px; flex: 1; text-align: center;">Add Funds</button>
@@ -1272,7 +1276,7 @@ async function renderSavingsView() {
               <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Target Amount</label>
               <div class="amount-wrapper" style="position: relative;">
                 <span class="amount-symbol" style="left: 8px; font-size: 11px;">$</span>
-                <input type="text" class="form-input amount-field savings-goal-amount" id="savings-goal-amount-${accId}" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
+                <input type="text" class="form-input amount-field savings-goal-amount" id="savings-goal-amount-${accId}" inputmode="decimal" style="padding: 4px 4px 4px 20px; font-size: 12px; height: auto;" placeholder="0.00">
               </div>
             </div>
             <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 130px;">
@@ -2988,7 +2992,7 @@ async function renderActiveWizardStep() {
         if (valDiv.querySelector('input')) return;
 
         const currentVal = wizardState.budgetLimits[g] || 0;
-        valDiv.innerHTML = `<span style="font-size:12px; font-weight:700;">$</span><input type="text" class="wizard-inline-input" value="${currentVal.toFixed(2)}" style="width: 70px; height: 22px; font-size: 12px; padding: 0 4px;">`;
+        valDiv.innerHTML = `<span style="font-size:12px; font-weight:700;">$</span><input type="text" class="wizard-inline-input" value="${currentVal.toFixed(2)}" inputmode="decimal" style="width: 70px; height: 22px; font-size: 12px; padding: 0 4px;">`;
         const input = valDiv.querySelector('input');
         input.focus();
         input.select();
@@ -3099,7 +3103,7 @@ async function renderActiveWizardStep() {
         <span class="text-meta" style="display:block; margin-bottom: var(--spacing-sm);">How much do you intend to save in ${activeMonthName}? (Defaults to ${prevMonthName}'s goal of ${window.formatCurrency(prevSavingsGoalVal)})</span>
         <div class="form-group amount-wrapper" style="margin-bottom:0; position:relative;">
           <span class="amount-symbol" style="left:8px; font-size:11px;">$</span>
-          <input type="text" class="form-input amount-field" id="wizard-savings-goal-input" placeholder="0.00" value="${wizardState.savingsGoal.toFixed(2)}" style="padding: 4px 4px 4px 20px; font-size:12px; height:auto;">
+          <input type="text" class="form-input amount-field" id="wizard-savings-goal-input" placeholder="0.00" value="${wizardState.savingsGoal.toFixed(2)}" inputmode="decimal" style="padding: 4px 4px 4px 20px; font-size:12px; height:auto;">
         </div>
       </div>
 
@@ -3259,7 +3263,7 @@ async function renderActiveWizardStep() {
         <span class="text-meta" style="display:block; margin-bottom: var(--spacing-sm);">Establish a target income benchmark for this cycle. (Defaults to ${prevMonthName}'s goal of ${window.formatCurrency(prevIncomeGoalVal)})</span>
         <div class="form-group amount-wrapper" style="margin-bottom:0; position:relative;">
           <span class="amount-symbol" style="left:8px; font-size:11px;">$</span>
-          <input type="text" class="form-input amount-field" id="wizard-income-goal-input" placeholder="0.00" value="${wizardState.incomeGoal.toFixed(2)}" style="padding: 4px 4px 4px 20px; font-size:12px; height:auto;">
+          <input type="text" class="form-input amount-field" id="wizard-income-goal-input" placeholder="0.00" value="${wizardState.incomeGoal.toFixed(2)}" inputmode="decimal" style="padding: 4px 4px 4px 20px; font-size:12px; height:auto;">
         </div>
       </div>
     `;
@@ -5063,6 +5067,8 @@ function bindSettings() {
         const welcomeScreen = document.getElementById('welcome-screen');
         if (welcomeScreen) {
           welcomeScreen.classList.add('hidden');
+          const themeMeta = document.getElementById('theme-color-meta');
+          if (themeMeta) themeMeta.setAttribute('content', '#f9f6f0');
         }
       }
     });
@@ -5107,10 +5113,16 @@ function bindSettings() {
     db.disconnectGoogle();
     refreshApplicationData().then(() => {
       refreshSettingsUI();
-      triggerSuccessAnimation("Disconnected. Local Sandbox Active.");
+      triggerSuccessAnimation("Disconnected");
+      const welcomeScreen = document.getElementById('welcome-screen');
+      if (welcomeScreen) {
+        welcomeScreen.classList.remove('hidden');
+        const themeMeta = document.getElementById('theme-color-meta');
+        if (themeMeta) themeMeta.setAttribute('content', '#1e352f');
+      }
       showWarningModal(
         "Google Sheets Offline",
-        "You have manually disconnected Google Sheets. You are now offline, and local sandbox data is active."
+        "You have manually disconnected Google Sheets. Please sign back in to continue."
       );
     });
   });

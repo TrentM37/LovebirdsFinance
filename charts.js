@@ -168,6 +168,26 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
           labelTotal.textContent = `${item.label} (${(percentage * 100).toFixed(1)}%)`;
           labelTotal.setAttribute('fill', color);
         }
+
+        // Add global listener to clear selection when clicking anywhere off this slice
+        setTimeout(() => {
+          const dismissSelection = (evt) => {
+            if (activePath && !activePath.contains(evt.target)) {
+              activePath.style.transform = 'scale(1)';
+              activePath.style.opacity = '1';
+              activePath = null;
+              if (textTotal) {
+                textTotal.textContent = window.formatCurrency(total);
+              }
+              if (labelTotal) {
+                labelTotal.textContent = centerLabel;
+                labelTotal.setAttribute('fill', 'var(--color-font-secondary)');
+              }
+              document.removeEventListener('click', dismissSelection);
+            }
+          };
+          document.addEventListener('click', dismissSelection);
+        }, 0);
       }
     });
 
@@ -214,21 +234,6 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
   labelTotal.setAttribute('letter-spacing', '0.05em');
   labelTotal.textContent = centerLabel;
   svg.appendChild(labelTotal);
-
-  svg.addEventListener('click', () => {
-    if (activePath) {
-      activePath.style.transform = 'scale(1)';
-      activePath.style.opacity = '1';
-      activePath = null;
-      if (textTotal) {
-        textTotal.textContent = window.formatCurrency(total);
-      }
-      if (labelTotal) {
-        labelTotal.textContent = centerLabel;
-        labelTotal.setAttribute('fill', 'var(--color-font-secondary)');
-      }
-    }
-  });
 
   containerElement.appendChild(svg);
 }
