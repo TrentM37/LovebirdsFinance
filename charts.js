@@ -505,7 +505,7 @@ function renderLineChart(containerElement, dataset, onMonthClick = null, selecte
         // Re-bind click and hover handlers on catcher to scale the visible dot stably
         catcher.onclick = (e) => {
           e.stopPropagation();
-          if (onMonthClick) onMonthClick(d, i);
+          if (onMonthClick) onMonthClick(d, i, e);
         };
 
         catcher.onmouseenter = () => {
@@ -535,7 +535,7 @@ function renderLineChart(containerElement, dataset, onMonthClick = null, selecte
 
       label.onclick = (e) => {
         e.stopPropagation();
-        if (onMonthClick) onMonthClick(d, i);
+        if (onMonthClick) onMonthClick(d, i, e);
       };
     });
 
@@ -611,7 +611,7 @@ function renderLineChart(containerElement, dataset, onMonthClick = null, selecte
     
     label.onclick = (e) => {
       e.stopPropagation();
-      if (onMonthClick) onMonthClick(d, i);
+      if (onMonthClick) onMonthClick(d, i, e);
     };
 
     svg.appendChild(label);
@@ -785,7 +785,7 @@ function renderLineChart(containerElement, dataset, onMonthClick = null, selecte
 
     catcher.onclick = (e) => {
       e.stopPropagation();
-      if (onMonthClick) onMonthClick(d, i);
+      if (onMonthClick) onMonthClick(d, i, e);
     };
 
     catcher.addEventListener('mouseenter', () => {

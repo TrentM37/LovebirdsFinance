@@ -85,12 +85,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Keep overlay active for a brief split-second (1.5s) to show the animated entry
       setTimeout(() => {
         welcomeScreen.classList.add('hidden');
+        document.documentElement.classList.remove('welcome-active');
         const themeMeta = document.getElementById('theme-color-meta');
         if (themeMeta) themeMeta.setAttribute('content', '#f9f6f0');
       }, 1500);
     } else {
       // Google not connected, keep user locked on the splash page until bypass/sign-in
       welcomeScreen.classList.remove('hidden');
+      document.documentElement.classList.add('welcome-active');
       const themeMeta = document.getElementById('theme-color-meta');
       if (themeMeta) themeMeta.setAttribute('content', '#1e352f');
     }
@@ -2456,14 +2458,21 @@ async function renderAnalyticsView() {
   document.getElementById('chart-legend-average').style.display = 'flex';
 
   const container = document.getElementById('analytics-chart-container');
-  window.renderLineChart(container, chartDataset, (clickedItem, clickedIndex) => {
+  window.renderLineChart(container, chartDataset, (clickedItem, clickedIndex, event) => {
     state.selectedAnalyticsMonthIndex = clickedIndex;
     renderAnalyticsView();
     
-    // On mobile viewports, show the tapped point value inside a stylized modal popup
-    if (window.innerWidth < 768 && clickedItem) {
-      let title = clickedItem.label;
+    // On mobile viewports, show the tapped point value inside a micro tooltip next to the point clicked
+    if (window.innerWidth < 768 && clickedItem && event) {
+      // Remove any existing tooltips
+      const oldTooltip = document.getElementById('chart-micro-tooltip');
+      if (oldTooltip) oldTooltip.remove();
+
+      const tooltip = document.createElement('div');
+      tooltip.id = 'chart-micro-tooltip';
+      tooltip.className = 'chart-tooltip';
       
+      let title = clickedItem.label;
       const valStr = window.formatCurrency(clickedItem.actual || 0);
       const goalStr = window.formatCurrency(clickedItem.goal || 0);
       
@@ -2471,16 +2480,41 @@ async function renderAnalyticsView() {
         'income': 'Income',
         'expense': 'Expenses',
         'savings': 'Savings Added',
-        'avg-spent': 'Daily Spent Average'
+        'avg-spent': 'Daily Spent'
       };
       const currentSegmentName = segmentNameMap[state.analyticsSegment] || 'Value';
       
-      let descText = `Actual ${currentSegmentName}: ${valStr}`;
+      let tooltipHtml = `<strong style="display:block;margin-bottom:2px;font-size:12px;">${title}</strong>`;
+      tooltipHtml += `<span>${currentSegmentName}: ${valStr}</span>`;
       if (clickedItem.goal > 0) {
-        descText += `\nGoal target: ${goalStr}`;
+        tooltipHtml += `<br><span style="opacity:0.8;">Goal: ${goalStr}</span>`;
       }
+      tooltip.innerHTML = tooltipHtml;
       
-      showWarningModal(title, descText);
+      document.body.appendChild(tooltip);
+      
+      // Position tooltip centered above the tap coordinates
+      tooltip.style.left = `${event.clientX}px`;
+      tooltip.style.top = `${event.clientY}px`;
+      
+      // Force reflow and reveal
+      void tooltip.offsetWidth;
+      tooltip.style.opacity = '1';
+      
+      // Tap outside (any screen tap) dismisses the tooltip
+      setTimeout(() => {
+        const dismissTooltip = (evt) => {
+          const activeTooltip = document.getElementById('chart-micro-tooltip');
+          if (activeTooltip) {
+            activeTooltip.style.opacity = '0';
+            setTimeout(() => {
+              if (activeTooltip.parentNode) activeTooltip.remove();
+            }, 200);
+          }
+          document.removeEventListener('click', dismissTooltip);
+        };
+        document.addEventListener('click', dismissTooltip);
+      }, 50);
     }
   }, state.selectedAnalyticsMonthIndex, activeSegment);
 
@@ -5067,6 +5101,7 @@ function bindSettings() {
         const welcomeScreen = document.getElementById('welcome-screen');
         if (welcomeScreen) {
           welcomeScreen.classList.add('hidden');
+          document.documentElement.classList.remove('welcome-active');
           const themeMeta = document.getElementById('theme-color-meta');
           if (themeMeta) themeMeta.setAttribute('content', '#f9f6f0');
         }
@@ -5117,6 +5152,7 @@ function bindSettings() {
       const welcomeScreen = document.getElementById('welcome-screen');
       if (welcomeScreen) {
         welcomeScreen.classList.remove('hidden');
+        document.documentElement.classList.add('welcome-active');
         const themeMeta = document.getElementById('theme-color-meta');
         if (themeMeta) themeMeta.setAttribute('content', '#1e352f');
       }
