@@ -24,6 +24,7 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
   containerElement.innerHTML = '';
   let textTotal = null;
   let labelTotal = null;
+  let activePath = null;
   
   const filteredData = data.filter(d => d.value > 0);
   if (filteredData.length === 0) {
@@ -102,6 +103,7 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
     path.appendChild(title);
 
     path.addEventListener('mouseenter', () => {
+      if (activePath) return; // Ignore hover if we have a locked selection
       path.style.transform = 'scale(1.05)';
       path.style.opacity = '0.9';
       
@@ -116,6 +118,7 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
     });
 
     path.addEventListener('mouseleave', () => {
+      if (activePath) return; // Ignore hover if we have a locked selection
       path.style.transform = 'scale(1)';
       path.style.opacity = '1';
       
@@ -126,6 +129,45 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
       if (typeof labelTotal !== 'undefined' && labelTotal) {
         labelTotal.textContent = centerLabel;
         labelTotal.setAttribute('fill', 'var(--color-font-secondary)');
+      }
+    });
+
+    path.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      if (activePath && activePath !== path) {
+        activePath.style.transform = 'scale(1)';
+        activePath.style.opacity = '1';
+      }
+      
+      if (activePath === path) {
+        // Toggle selection off
+        path.style.transform = 'scale(1)';
+        path.style.opacity = '1';
+        activePath = null;
+        
+        // Restore overall total
+        if (typeof textTotal !== 'undefined' && textTotal) {
+          textTotal.textContent = window.formatCurrency(total);
+        }
+        if (typeof labelTotal !== 'undefined' && labelTotal) {
+          labelTotal.textContent = centerLabel;
+          labelTotal.setAttribute('fill', 'var(--color-font-secondary)');
+        }
+      } else {
+        // Lock selection
+        path.style.transform = 'scale(1.05)';
+        path.style.opacity = '0.9';
+        activePath = path;
+        
+        // Update center text
+        if (typeof textTotal !== 'undefined' && textTotal) {
+          textTotal.textContent = window.formatCurrency(item.value);
+        }
+        if (typeof labelTotal !== 'undefined' && labelTotal) {
+          labelTotal.textContent = `${item.label} (${(percentage * 100).toFixed(1)}%)`;
+          labelTotal.setAttribute('fill', color);
+        }
       }
     });
 
@@ -172,6 +214,21 @@ function renderPieChart(containerElement, data, activeSegment = 'expense') {
   labelTotal.setAttribute('letter-spacing', '0.05em');
   labelTotal.textContent = centerLabel;
   svg.appendChild(labelTotal);
+
+  svg.addEventListener('click', () => {
+    if (activePath) {
+      activePath.style.transform = 'scale(1)';
+      activePath.style.opacity = '1';
+      activePath = null;
+      if (textTotal) {
+        textTotal.textContent = window.formatCurrency(total);
+      }
+      if (labelTotal) {
+        labelTotal.textContent = centerLabel;
+        labelTotal.setAttribute('fill', 'var(--color-font-secondary)');
+      }
+    }
+  });
 
   containerElement.appendChild(svg);
 }

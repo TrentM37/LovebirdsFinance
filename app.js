@@ -76,6 +76,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Bind click-outside listeners to close popups
   bindOutsideClicks();
+
+  // Initialize Welcome / Splash Screen Gate
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const welcomeSandboxBtn = document.getElementById('welcome-btn-sandbox');
+
+  if (welcomeScreen) {
+    if (db.isGoogleConnected()) {
+      // Keep overlay active for a brief split-second (1.5s) to show the animated entry
+      setTimeout(() => {
+        welcomeScreen.classList.add('hidden');
+      }, 1500);
+    } else {
+      // Google not connected, keep user locked on the splash page until bypass/sign-in
+      welcomeScreen.classList.remove('hidden');
+    }
+  }
+
+  if (welcomeSandboxBtn) {
+    welcomeSandboxBtn.addEventListener('click', () => {
+      if (welcomeScreen) {
+        welcomeScreen.classList.add('hidden');
+      }
+    });
+  }
 });
 
 function bindOutsideClicks() {
@@ -379,13 +403,28 @@ async function renderDashboardView() {
     const [actM, actY] = state.activeMonthYear.split('-').map(Number);
     const isFutureMonth = (actY > curSysY) || (actY === curSysY && actM > curSysM);
 
-    if (!hasPlanCompleted && !isFutureMonth) {
+    if (!isFutureMonth) {
       promoTile.style.display = 'block';
       const activeMonthName = getMonthName(state.activeMonthYear);
       const promoHeader = promoTile.querySelector('h2');
-      if (promoHeader) {
-        promoHeader.textContent = `Start ${activeMonthName}'s Monthly Plan`;
+      const promoText = promoTile.querySelector('.text-meta');
+      
+      if (hasPlanCompleted) {
+        if (promoHeader) {
+          promoHeader.textContent = `Review ${activeMonthName} Plan`;
+        }
+        if (promoText) {
+          promoText.textContent = `Click to view or adjust your budget limits, savings goals, and income goals for this cycle.`;
+        }
+      } else {
+        if (promoHeader) {
+          promoHeader.textContent = `Start ${activeMonthName}'s Monthly Plan`;
+        }
+        if (promoText) {
+          promoText.textContent = `Set up your budget limits, savings goals, and income goals for the new cycle.`;
+        }
       }
+      
       promoTile.onclick = () => {
         navigateTo('wizard');
       };
@@ -2292,12 +2331,25 @@ async function renderAnalyticsView() {
     const getWeeksList = (offsetWeeks) => {
       const list = [];
       const baseEnd = new Date(endDate);
+      
+      // Shift baseEnd to the Saturday of its week to align all weeks Sunday-Saturday
+      const day = baseEnd.getDay();
+      baseEnd.setDate(baseEnd.getDate() + (6 - day));
+      
+      // Apply offset weeks pagination
       baseEnd.setDate(baseEnd.getDate() - offsetWeeks * 7);
+      
       for (let i = 0; i < 6; i++) {
         const wEnd = new Date(baseEnd);
         wEnd.setDate(baseEnd.getDate() - i * 7);
+        
         const wStart = new Date(wEnd);
         wStart.setDate(wEnd.getDate() - 6);
+        
+        // Zero out times for exact inclusive comparison bounds
+        wStart.setHours(0, 0, 0, 0);
+        wEnd.setHours(23, 59, 59, 999);
+        
         list.push({ start: wStart, end: wEnd });
       }
       list.reverse();
@@ -2412,6 +2464,29 @@ async function renderAnalyticsView() {
   window.renderLineChart(container, chartDataset, (clickedItem, clickedIndex) => {
     state.selectedAnalyticsMonthIndex = clickedIndex;
     renderAnalyticsView();
+    
+    // On mobile viewports, show the tapped point value inside a stylized modal popup
+    if (window.innerWidth < 768 && clickedItem) {
+      let title = clickedItem.label;
+      
+      const valStr = window.formatCurrency(clickedItem.actual || 0);
+      const goalStr = window.formatCurrency(clickedItem.goal || 0);
+      
+      const segmentNameMap = {
+        'income': 'Income',
+        'expense': 'Expenses',
+        'savings': 'Savings Added',
+        'avg-spent': 'Daily Spent Average'
+      };
+      const currentSegmentName = segmentNameMap[state.analyticsSegment] || 'Value';
+      
+      let descText = `Actual ${currentSegmentName}: ${valStr}`;
+      if (clickedItem.goal > 0) {
+        descText += `\nGoal target: ${goalStr}`;
+      }
+      
+      showWarningModal(title, descText);
+    }
   }, state.selectedAnalyticsMonthIndex, activeSegment);
 
   // If a month index is selected, render its breakdown card, else render cumulative period summary
@@ -2499,8 +2574,23 @@ function renderMonthBreakdown(monthYear, allTransactions, allIncome, activeSegme
     } else if (state.analyticsDuration === 'month') {
       const [mStr, yStr] = state.activeMonthYear.split('-');
       const dateObj = new Date(parseInt(yStr), parseInt(mStr) - 1, 1);
-      monthNameReadable = `${dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} (Last 4 Weeks)`;
-      numDays = 28;
+      const endDate = new Date(parseInt(yStr), parseInt(mStr), 0);
+      
+      // Determine dynamic start/end boundaries for the 6 Sun-Sat weeks
+      const baseEnd = new Date(endDate);
+      const day = baseEnd.getDay();
+      baseEnd.setDate(baseEnd.getDate() + (6 - day)); // Sat of that week
+      baseEnd.setDate(baseEnd.getDate() - state.weeksOffset * 7); // Active week offset
+      
+      const wEnd = new Date(baseEnd);
+      const wStart = new Date(wEnd);
+      wStart.setDate(wEnd.getDate() - 35); // Start date is Sunday 5 weeks prior (35 days before Sat)
+      
+      const startStr = wStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const endStr = wEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      
+      monthNameReadable = `${dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} (${startStr} - ${endStr})`;
+      numDays = 42;
     }
   }
 
@@ -4965,6 +5055,12 @@ function bindSettings() {
         await refreshApplicationData();
         refreshSettingsUI();
         triggerSuccessAnimation("Connected to Google Sheet");
+        
+        // Hide welcome screen overlay
+        const welcomeScreen = document.getElementById('welcome-screen');
+        if (welcomeScreen) {
+          welcomeScreen.classList.add('hidden');
+        }
       }
     });
   };
@@ -4979,6 +5075,28 @@ function bindSettings() {
       tokenClient.requestAccessToken();
     }
   });
+
+  // Bind Welcome Screen action buttons
+  const welcomeConnectBtn = document.getElementById('welcome-btn-connect');
+  if (welcomeConnectBtn) {
+    welcomeConnectBtn.addEventListener('click', () => {
+      if (typeof google === 'undefined') {
+        alert("Google Identity Services library is not loaded. Check your internet connection.");
+        return;
+      }
+      initClient();
+      if (tokenClient) {
+        tokenClient.requestAccessToken();
+      }
+    });
+  }
+
+  const welcomeSettingsBtn = document.getElementById('welcome-btn-settings');
+  if (welcomeSettingsBtn) {
+    welcomeSettingsBtn.addEventListener('click', () => {
+      showSettingsModal();
+    });
+  }
 
 
 
@@ -5128,6 +5246,12 @@ function reauthorizeGoogleSheets() {
         db.connectGoogle(response.access_token, db.spreadsheetId);
         await syncSpreadsheetData(true);
         triggerSuccessAnimation("Google session re-authorized");
+        
+        // Hide welcome screen overlay
+        const welcomeScreen = document.getElementById('welcome-screen');
+        if (welcomeScreen) {
+          welcomeScreen.classList.add('hidden');
+        }
       } else {
         showSettingsModal();
       }

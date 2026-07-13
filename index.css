@@ -131,7 +131,7 @@ h3 {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -161,7 +161,7 @@ h3 {
   height: 100%;
   background-color: var(--color-base-canvas);
   overflow-y: auto;
-  padding: var(--spacing-md) var(--spacing-md) calc(80px + env(safe-area-inset-bottom)) var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-md) calc(90px + env(safe-area-inset-bottom)) var(--spacing-md);
   will-change: transform, opacity;
   display: none;
 }
@@ -691,7 +691,7 @@ h3 {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background-color: rgba(43, 36, 33, 0.4); /* translucent Dark Walnut */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1902,7 +1902,7 @@ h3 {
   }
 
   .app-view {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
   }
 
   /* Mobile FAB position & size overrides */
@@ -1999,6 +1999,171 @@ h3 {
     grid-template-columns: 1fr 1fr !important;
     gap: var(--spacing-xs) !important;
     font-size: 10px !important;
+  }
+}
+
+/* ==========================================================================
+   Welcome / Splash Screen Gate
+   ========================================================================== */
+.welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  background-color: var(--color-primary-accent);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.5s var(--transition-glide);
+}
+
+.welcome-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 320px;
+  padding: var(--spacing-lg);
+  margin-top: -40px; /* Optical offset upwards */
+}
+
+/* Logo Sizing and Animation */
+.welcome-logo-container {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-base-canvas);
+  animation: logoReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+.welcome-logo {
+  width: 100%;
+  height: 100%;
+  stroke: var(--color-base-canvas);
+  fill: none !important;
+}
+
+/* Title Sizing and Animation */
+.welcome-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-base-canvas);
+  margin-top: var(--spacing-lg);
+  opacity: 0;
+  transform: translateY(15px);
+  animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+/* Action Buttons Fade In (1s delay) */
+.welcome-actions {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: actionsReveal 1s var(--transition-glide) 1.2s forwards;
+}
+
+.welcome-btn-signin {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--border-radius-md);
+  border: none;
+  background-color: var(--color-base-canvas);
+  color: var(--color-primary-accent);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.2s;
+  font-family: var(--font-family);
+}
+
+.welcome-btn-signin:hover {
+  transform: translateY(-1px);
+  background-color: var(--color-surface-variant);
+}
+
+.welcome-btn-sandbox {
+  background: none;
+  border: 1px solid rgba(253, 251, 247, 0.2);
+  color: rgba(253, 251, 247, 0.6);
+  padding: 10px;
+  border-radius: var(--border-radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-family);
+}
+
+.welcome-btn-sandbox:hover {
+  border-color: var(--color-base-canvas);
+  color: var(--color-base-canvas);
+}
+
+/* Gear Icon Positioning */
+.welcome-gear-btn {
+  position: absolute;
+  bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+  left: calc(var(--spacing-md) + env(safe-area-inset-left));
+  background: none;
+  border: none;
+  color: rgba(253, 251, 247, 0.4);
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s, transform 0.2s;
+  opacity: 0;
+  animation: gearReveal 1s var(--transition-glide) 1.2s forwards;
+}
+
+.welcome-gear-btn:hover {
+  color: var(--color-base-canvas);
+  transform: rotate(45deg);
+}
+
+/* Keyframe Animations */
+@keyframes logoReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes titleReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes actionsReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gearReveal {
+  to {
+    opacity: 1;
   }
 }
 
