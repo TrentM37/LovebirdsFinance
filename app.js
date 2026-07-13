@@ -2462,8 +2462,8 @@ async function renderAnalyticsView() {
     state.selectedAnalyticsMonthIndex = clickedIndex;
     renderAnalyticsView();
     
-    // On mobile viewports, show the tapped point value inside a micro tooltip next to the point clicked
-    if (window.innerWidth < 768 && clickedItem && event) {
+    // Show the clicked point value inside a micro tooltip next to the point clicked on desktop and mobile
+    if (clickedItem && event) {
       // Remove any existing tooltips
       const oldTooltip = document.getElementById('chart-micro-tooltip');
       if (oldTooltip) oldTooltip.remove();
@@ -2501,9 +2501,12 @@ async function renderAnalyticsView() {
       void tooltip.offsetWidth;
       tooltip.style.opacity = '1';
       
-      // Tap outside (any screen tap) dismisses the tooltip
+      // Tap outside (any screen tap) dismisses the tooltip, ignoring immediate clicks
+      const openTime = Date.now();
       setTimeout(() => {
         const dismissTooltip = (evt) => {
+          if (Date.now() - openTime < 200) return; // Prevent immediate dismissal from same touch sequence
+          
           const activeTooltip = document.getElementById('chart-micro-tooltip');
           if (activeTooltip) {
             activeTooltip.style.opacity = '0';

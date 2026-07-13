@@ -3,8 +3,8 @@
   "short_name": "BudgetApp",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#1e352f",
+  "theme_color": "#1e352f",
   "icons": [
     {
       "src": "icon.png",
