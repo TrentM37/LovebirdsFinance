@@ -3240,25 +3240,11 @@ async function renderActiveWizardStep() {
     const prevIncomeGoalVal = prevIncome ? prevIncome.allocated_value : 0;
     const prevIncomeActual = (await db.getIncome(prevMonthYear)).reduce((sum, i) => sum + i.amount, 0);
 
-    // Goal Accomplished check
-    let bannerHtml = '';
-    if (prevIncomeGoalVal > 0 && prevIncomeActual >= prevIncomeGoalVal) {
-      bannerHtml = `
-        <div class="income-goal-accomplished">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--color-success)" style="margin: 0 auto 6px auto; display: block;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <strong style="font-size: 14px; text-transform: uppercase; letter-spacing:0.05em; display:block; margin-bottom:2px;">Goal Accomplished!</strong>
-          You earned <span class="tabular-nums" style="font-weight:700;">${window.formatCurrency(prevIncomeActual)}</span> vs your goal of <span class="tabular-nums" style="font-weight:700;">${window.formatCurrency(prevIncomeGoalVal)}</span>. Great work!
-        </div>
-      `;
-    } else {
-      bannerHtml = `
-        <div style="background-color: var(--color-surface-variant); border: 1px solid var(--color-border); color: var(--color-font-secondary); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md); text-align: center;">
-          ${prevMonthName} Income: <strong class="tabular-nums" style="color:var(--color-font-primary);">${window.formatCurrency(prevIncomeActual)}</strong> vs Goal: <strong class="tabular-nums" style="color:var(--color-font-primary);">${window.formatCurrency(prevIncomeGoalVal)}</strong>.
-        </div>
-      `;
-    }
+    const bannerHtml = `
+      <div style="background-color: var(--color-surface-variant); border: 1px solid var(--color-border); color: var(--color-font-secondary); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md); text-align: center;">
+        ${prevMonthName} Income: <strong class="tabular-nums" style="color:var(--color-font-primary);">${window.formatCurrency(prevIncomeActual)}</strong> vs Goal: <strong class="tabular-nums" style="color:var(--color-font-primary);">${window.formatCurrency(prevIncomeGoalVal)}</strong>.
+      </div>
+    `;
 
     // Math: Min Income = total monthly budget (new) + savings goal (new) - free cash (new)
     const newBudgetTotal = Object.values(wizardState.budgetLimits).reduce((sum, v) => sum + v, 0);

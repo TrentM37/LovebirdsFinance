@@ -774,8 +774,8 @@ function renderLineChart(containerElement, dataset, onMonthClick = null, selecte
     catcher.setAttribute('cx', x);
     catcher.setAttribute('cy', y);
     catcher.setAttribute('r', '15');
-    catcher.setAttribute('fill', 'transparent');
-    catcher.setAttribute('opacity', '0');
+    catcher.setAttribute('fill', 'rgba(0,0,0,0)');
+    catcher.setAttribute('pointer-events', 'all');
     catcher.style.cursor = 'pointer';
 
     // Tooltip on catcher
