@@ -211,23 +211,9 @@ h3 {
   justify-content: space-between;
   align-items: center;
   padding: calc(var(--spacing-md) + env(safe-area-inset-top)) var(--spacing-md) var(--spacing-md) var(--spacing-md);
-  background-color: var(--color-primary-accent);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--color-surface-card);
+  border-bottom: 1px solid var(--color-border);
   z-index: 10;
-}
-
-.header-bar .mobile-header-brand {
-  color: var(--color-base-canvas) !important;
-}
-
-.header-bar .month-selector-btn {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-  color: var(--color-base-canvas) !important;
-}
-
-.header-bar .month-selector-btn svg {
-  color: var(--color-base-canvas) !important;
 }
 
 .header-meta {
