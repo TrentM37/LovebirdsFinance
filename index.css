@@ -695,7 +695,7 @@ h3 {
   background-color: rgba(43, 36, 33, 0.4); /* translucent Dark Walnut */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 500;
+  z-index: 6000;
   display: flex;
   align-items: flex-end; /* bottom drawer layout on mobile */
   justify-content: center;
@@ -913,7 +913,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 7000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
@@ -1000,7 +1000,7 @@ h3 {
   width: 100vw;
   height: 100vh;
   background-color: rgba(253, 251, 247, 0.95); /* semi-transparent Rich Cream */
-  z-index: 2000;
+  z-index: 8000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1371,7 +1371,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1200;
+  z-index: 6500;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -2012,7 +2012,7 @@ h3 {
   width: 100vw;
   height: 100dvh;
   background-color: var(--color-primary-accent);
-  z-index: 10000;
+  z-index: 5000;
   display: flex;
   flex-direction: column;
   align-items: center;
